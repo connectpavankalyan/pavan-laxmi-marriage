@@ -59,10 +59,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 30px;  /* Increased gap between elements */
+            gap: 30px;
             margin: 40px auto;
             padding: 20px;
-            max-width: 1200px;  /* Increased max-width */
+            max-width: 1200px;
+            flex-wrap: wrap;
         }
 
         .name-left, .name-right {
@@ -876,12 +877,24 @@
         .video-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 8px 30px rgba(255, 77, 109, 0.15);
             border: 3px solid rgba(255, 77, 109, 0.1);
             background: linear-gradient(135deg, rgba(255, 245, 245, 0.95), rgba(255, 235, 235, 0.95));
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            border: none;
+            z-index: 2;
+            object-fit: cover; /* Make video cover the container */
         }
 
         .video-thumbnail {
@@ -890,22 +903,21 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Make thumbnail cover the container */
             border-radius: 20px;
             transition: opacity 0.3s ease;
             z-index: 1;
             opacity: 0.6;
-            filter: brightness(0.9) blur(0.5px);
         }
 
-        .video-container iframe {
+        /* Update the iframe HTML */
+        .video-wrapper {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border: none;
-            z-index: 2;
+            overflow: hidden;
         }
 
         .play-button {
@@ -1009,6 +1021,80 @@
             cursor: pointer;
             z-index: 3;
         }
+
+        /* Update mobile responsive styles */
+        @media screen and (max-width: 768px) {
+            .split-header {
+                gap: 15px;
+                padding: 10px;
+                position: relative;
+                justify-content: space-evenly;
+                width: 100%;
+            }
+
+            .name-left, .name-right {
+                font-size: 2.8rem;
+                min-width: auto;
+                padding: 0 10px;
+                flex: 0 0 40%; /* Take up less than half width */
+            }
+
+            .center-symbol {
+                font-size: 2.8rem;
+                margin: 0;
+                width: 80px;
+                height: 60px;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .heart-container {
+                width: 80px;
+                height: 60px;
+            }
+
+            .heart-container span {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .split-header {
+                gap: 10px;
+                padding: 5px;
+            }
+
+            .name-left, .name-right {
+                font-size: 2.2rem;
+                flex: 0 0 42%; /* Adjust width for smaller screens */
+                text-align: center;
+            }
+
+            .center-symbol {
+                font-size: 2.2rem;
+                width: 60px;
+                height: 50px;
+            }
+
+            .heart-container {
+                width: 60px;
+                height: 50px;
+            }
+
+            .heart-container span {
+                font-size: 2rem;
+            }
+
+            .wedding-announcement {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+                padding: 0 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1067,17 +1153,19 @@
                          class="video-thumbnail">
                     <div class="play-button"></div>
                 </div>
-                <iframe 
-                    id="saveTheDateVideo"
-                    src="about:blank"
-                    data-src="https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/preview?hd=1&autoplay=1"
-                    title="Save The Date Video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    style="border: none;"
-                    width="100%"
-                    height="100%">
-                </iframe>
+                <div class="video-wrapper">
+                    <iframe 
+                        id="saveTheDateVideo"
+                        src="about:blank"
+                        data-src="https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/preview?autoplay=1&quality=520"
+                        title="Save The Date Video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        style="border: none;"
+                        width="100%"
+                        height="100%">
+                    </iframe>
+                </div>
                 <a href="https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/view" 
                    class="expand-video" 
                    target="_blank" 
@@ -1267,23 +1355,15 @@
             const container = wrapper.closest('.video-container');
             const iframe = container.querySelector('iframe');
             
-            // Set the video source with autoplay parameter
+            // Set the video source with autoplay and quality parameters
             iframe.src = iframe.getAttribute('data-src');
             
-            // Hide the thumbnail wrapper
+            // Hide the thumbnail wrapper immediately
+            wrapper.style.display = 'none';
             wrapper.style.opacity = '0';
-            setTimeout(() => {
-                wrapper.style.display = 'none';
-            }, 300);
-
-            // Create a temporary invisible button to trigger autoplay
-            const tempButton = document.createElement('button');
-            tempButton.style.position = 'absolute';
-            tempButton.style.opacity = '0';
-            tempButton.style.pointerEvents = 'none';
-            container.appendChild(tempButton);
-            tempButton.click();
-            container.removeChild(tempButton);
+            
+            // Remove the temporary button approach since it's not needed
+            iframe.focus();
         }
     </script>
 </body>
