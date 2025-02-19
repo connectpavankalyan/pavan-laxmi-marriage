@@ -1292,8 +1292,8 @@
                     <iframe 
                         id="saveTheDateVideo"
                         src="about:blank"
-                        data-src="https://www.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/preview"
-                        allow="autoplay; encrypted-media"
+                        data-src="https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/preview"
+                        allow="autoplay; fullscreen"
                         allowfullscreen
                         style="border: none; width: 100%; height: 100%;">
                     </iframe>
@@ -1377,49 +1377,48 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
     <script>
         function initConfetti() {
-            // Keep the initial burst confetti
             const canvas = document.getElementById('confetti-canvas');
             const burstConfetti = confetti.create(canvas, { resize: true });
 
+            // Reduced initial burst
             burstConfetti({
-                particleCount: 200,
-                spread: 160,
+                particleCount: 100,  // Reduced from 200
+                spread: 120,         // Reduced from 160
                 origin: { y: 0.6 }
             });
 
-            // Enhanced side confetti configuration with lower velocity
+            // Reduced side confetti configuration
             const defaults = {
-                spread: 70,            // Slightly reduced spread
-                ticks: 400,           // Longer float duration
-                gravity: -0.2,        // Reduced upward gravity
-                decay: 0.97,          // Slower decay for longer lasting
-                startVelocity: 15,    // Reduced velocity for gentler movement
+                spread: 50,          // Reduced spread
+                ticks: 300,          // Reduced duration
+                gravity: -0.1,       // Reduced upward movement
+                decay: 0.95,         // Faster decay
+                startVelocity: 10,   // Reduced velocity
                 shapes: ['star', 'circle'],
                 colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8', 'ffd1dc', 'ff69b4'],
-                scalar: 1.0           // Normal size particles
+                scalar: 0.8          // Smaller particles
             };
 
-            // Enhanced side confetti function
             function shootSideConfetti() {
-                // Left side - lower origin point
+                // Left side - fewer particles
                 confetti({
                     ...defaults,
-                    particleCount: 20,    // Slightly fewer particles
-                    angle: 45,           // More upward angle
-                    origin: { x: 0.05, y: 0.95 }  // Lower origin point
+                    particleCount: 10,    // Reduced from 20
+                    angle: 45,
+                    origin: { x: 0.05, y: 0.95 }
                 });
 
-                // Right side - lower origin point
+                // Right side - fewer particles
                 confetti({
                     ...defaults,
-                    particleCount: 20,    // Slightly fewer particles
-                    angle: 135,          // More upward angle
-                    origin: { x: 0.95, y: 0.95 }  // Lower origin point
+                    particleCount: 10,    // Reduced from 20
+                    angle: 135,
+                    origin: { x: 0.95, y: 0.95 }
                 });
             }
 
             // Shoot confetti less frequently
-            setInterval(shootSideConfetti, 1500);  // Increased interval for less intensity
+            setInterval(shootSideConfetti, 3000);  // Increased interval from 1500 to 3000
         }
 
         window.addEventListener('load', initConfetti);
@@ -1482,25 +1481,20 @@
             // Hide thumbnail immediately
             wrapper.style.display = 'none';
             
-            // Construct the embed URL with autoplay parameter
-            const videoId = '17qHPrreuGhGKat-dwu7phwI30TJ7CW0O';
-            const embedUrl = `https://drive.google.com/file/d/${videoId}/preview?autoplay=1`;
+            // Set iframe source with autoplay parameter
+            iframe.src = 'https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/preview?autoplay=1';
             
-            // Set the iframe source
-            iframe.src = embedUrl;
-            
-            // Force load the video
+            // Add fallback link after a short delay if video doesn't play
             setTimeout(() => {
                 if (!iframe.contentWindow || !iframe.contentWindow.document) {
-                    // If video fails to load, show direct link
                     const directLink = document.createElement('a');
-                    directLink.href = `https://drive.google.com/file/d/${videoId}/view`;
+                    directLink.href = 'https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/view';
                     directLink.className = 'fallback-link';
                     directLink.textContent = 'Click here to watch video';
                     directLink.target = '_blank';
                     container.appendChild(directLink);
                 }
-            }, 3000);
+            }, 2000);
         }
     </script>
 </body>
