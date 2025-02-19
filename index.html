@@ -877,47 +877,45 @@
         .video-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            border-radius: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(255, 77, 109, 0.15);
-            border: 3px solid rgba(255, 77, 109, 0.1);
-            background: linear-gradient(135deg, rgba(255, 245, 245, 0.95), rgba(255, 235, 235, 0.95));
         }
 
-        .video-container iframe {
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            transform: translate(-50%, -50%);
             border: none;
+        }
+
+        .thumbnail-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 2;
-            object-fit: cover; /* Make video cover the container */
+            cursor: pointer;
+            transition: opacity 0.3s ease;
         }
 
         .video-thumbnail {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Make thumbnail cover the container */
-            border-radius: 20px;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-            opacity: 0.6;
-        }
-
-        /* Update the iframe HTML */
-        .video-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+            object-fit: cover;
         }
 
         .play-button {
@@ -1010,16 +1008,6 @@
         @keyframes floatVideo {
             0%, 100% { transform: translate(0, 0); }
             50% { transform: translate(5px, -5px); }
-        }
-
-        .thumbnail-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            z-index: 3;
         }
 
         /* Update mobile responsive styles */
@@ -1139,13 +1127,13 @@
             <h2 class="wedding-announcement">We are getting married!</h2>
             <p class="subtitle">💍💐 Join us as we embark on this beautiful journey of love, laughter, and happily ever after. 💕</p>
             <h3 class="date-label">Our Wedding</h3>
-            <h2 class="wedding-date">Sunday 02nd March 02, 2025</h2>
+            <h5 class="wedding-date">Sunday 02nd March, 2025</h5>
             <h4 class="date-label">11:35 AM</h4>
         </header>
 
         <section class="save-the-date-section" id="save-the-date">
             <h2 class="save-the-date-title">Save The Date</h2>
-
+            
             <div class="video-container">
                 <div class="thumbnail-wrapper" onclick="playVideo(this)">
                     <img src="https://lh3.googleusercontent.com/d/1kDs2xxWeMug2IM_aE0nnXB__HEZlneYL" 
@@ -1157,21 +1145,12 @@
                     <iframe 
                         id="saveTheDateVideo"
                         src="about:blank"
-                        data-src="https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/preview?autoplay=1&quality=360"
-                        title="Save The Date Video"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        data-src="https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/preview"
+                        allow="autoplay"
                         allowfullscreen
-                        style="border: none;"
-                        width="100%"
-                        height="100%">
+                        style="border: none; width: 100%; height: 100%;">
                     </iframe>
                 </div>
-                <a href="https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/view" 
-                   class="expand-video" 
-                   target="_blank" 
-                   title="Open in new tab">
-                    ↗️
-                </a>
                 <span class="video-decoration top-left">💝</span>
                 <span class="video-decoration top-right">✨</span>
                 <span class="video-decoration bottom-left">🌺</span>
@@ -1355,15 +1334,22 @@
             const container = wrapper.closest('.video-container');
             const iframe = container.querySelector('iframe');
             
-            // Set the video source with autoplay and quality parameters
+            // Set the video source
             iframe.src = iframe.getAttribute('data-src');
             
-            // Hide the thumbnail wrapper immediately
+            // Hide the thumbnail wrapper
             wrapper.style.display = 'none';
             wrapper.style.opacity = '0';
             
-            // Remove the temporary button approach since it's not needed
+            // Focus on iframe for better keyboard accessibility
             iframe.focus();
+            
+            // Add error handling
+            iframe.onerror = function() {
+                console.error('Error loading video');
+                wrapper.style.display = 'block';
+                wrapper.style.opacity = '1';
+            };
         }
     </script>
 </body>
