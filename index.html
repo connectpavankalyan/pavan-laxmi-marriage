@@ -901,88 +901,6 @@
             border: none;
         }
 
-        .thumbnail-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
-        }
-
-        .video-thumbnail {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .play-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 0, 0, 0.9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 5;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.9);
-        }
-
-        .play-button:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-            background: #cc0000; /* Darker YouTube red on hover */
-            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
-        }
-
-        .play-button::after {
-            content: '▶';
-            font-size: 2rem;
-            color: white;
-            margin-left: 4px;
-            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
-        }
-
-        .expand-video {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid rgba(255, 77, 109, 0.3);
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            z-index: 10;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .expand-video:hover {
-            transform: scale(1.1);
-            background: white;
-        }
-
-        .save-the-date-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.8rem;
-            color: #ff4d6d;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(255, 77, 109, 0.1);
-        }
-
         .video-decoration {
             position: absolute;
             font-size: 2.2rem;
@@ -1282,24 +1200,16 @@
             <h2 class="save-the-date-title">Save The Date</h2>
             
             <div class="video-container">
-                <div class="thumbnail-wrapper" onclick="playVideo(this)">
-                    <img src="https://lh3.googleusercontent.com/d/1kDs2xxWeMug2IM_aE0nnXB__HEZlneYL" 
-                         alt="Save The Date Video Thumbnail" 
-                         class="video-thumbnail">
-                    <div class="play-button"></div>
-                </div>
                 <div class="video-wrapper">
                     <iframe 
                         id="saveTheDateVideo"
-                        src="about:blank"
-                        data-src="https://www.youtube.com/embed/UDsZ_gIvP0w?autoplay=1&rel=0&showinfo=0"
+                        src="https://www.youtube.com/embed/UDsZ_gIvP0w?rel=0&showinfo=0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen
                         style="border: none; width: 100%; height: 100%;">
                     </iframe>
                 </div>
                 <span class="video-decoration top-left">💝</span>
-                
             </div>
         </section>
 
@@ -1472,26 +1382,5 @@
     <!-- Add traditional borders -->
     <div class="traditional-border border-top"></div>
     <div class="traditional-border border-bottom"></div>
-
-    <script>
-        function playVideo(wrapper) {
-            const container = wrapper.closest('.video-container');
-            const iframe = container.querySelector('iframe');
-            
-            // Hide thumbnail immediately
-            wrapper.style.display = 'none';
-            
-            // Set iframe source
-            iframe.src = iframe.getAttribute('data-src');
-            
-            // Add error handling
-            setTimeout(() => {
-                if (!iframe.contentWindow || !iframe.contentWindow.document) {
-                    // If video fails to load, open in new tab
-                    window.open('https://www.youtube.com/watch?v=UDsZ_gIvP0w', '_blank');
-                }
-            }, 2000);
-        }
-    </script>
 </body>
 </html> 
