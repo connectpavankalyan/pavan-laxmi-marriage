@@ -1082,6 +1082,134 @@
                 font-size: 1rem;
                 padding: 0 15px;
             }
+
+            .wedding-date {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+                font-size: 1.5rem;
+                margin: 15px 0;
+            }
+
+            .date-parts {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+
+            .date-label {
+                font-size: 1.8rem;
+                margin: 10px 0 5px 0;
+            }
+        }
+
+        /* Add these styles for date formatting */
+        .wedding-date {
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        @media screen and (max-width: 480px) {
+            .wedding-date {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+                font-size: 1.5rem;
+                margin: 15px 0;
+            }
+
+            .date-parts {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+            }
+
+            .date-label {
+                font-size: 1.8rem;
+                margin: 10px 0 5px 0;
+            }
+        }
+
+        /* Update the date and time border styles */
+        .date-time-container {
+            position: relative;
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px 0;
+        }
+
+        .border-design {
+            position: absolute;
+            height: 2px;
+            width: 90%; /* Reduced from 100% to create side gaps */
+            left: 5%; /* Center the border by offsetting 5% from left */
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(255, 77, 109, 0.3) 5%,  /* Start thin */
+                rgba(255, 77, 109, 0.5) 15%, /* Gradually thicker */
+                rgba(255, 77, 109, 1) 30%,   /* Full thickness */
+                rgba(255, 77, 109, 1) 70%,   /* Maintain thickness */
+                rgba(255, 77, 109, 0.5) 85%, /* Start thinning */
+                rgba(255, 77, 109, 0.3) 95%, /* Thinner */
+                transparent 100%
+            );
+        }
+
+        .border-design::before,
+        .border-design::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 1.5px dotted #ff4d6d;
+            border-radius: 50%;
+        }
+
+        .border-design::before {
+            left: -4px;
+            top: -3px;
+        }
+
+        .border-design::after {
+            right: -4px;
+            top: -3px;
+        }
+
+        .border-design.top {
+            top: 0;
+        }
+
+        .border-design.bottom {
+            bottom: 0;
+        }
+
+        /* Mobile responsive adjustments */
+        @media screen and (max-width: 480px) {
+            .date-time-container {
+                width: 90%;
+                margin: 30px auto;
+            }
+
+            .border-design {
+                width: 85%; /* Create larger gaps on mobile */
+                left: 7.5%;
+                background: linear-gradient(
+                    to right,
+                    transparent 0%,
+                    rgba(255, 77, 109, 0.3) 10%,
+                    rgba(255, 77, 109, 0.5) 20%,
+                    rgba(255, 77, 109, 1) 35%,
+                    rgba(255, 77, 109, 1) 65%,
+                    rgba(255, 77, 109, 0.5) 80%,
+                    rgba(255, 77, 109, 0.3) 90%,
+                    transparent 100%
+                );
+            }
         }
     </style>
 </head>
@@ -1126,9 +1254,20 @@
             </div>
             <h2 class="wedding-announcement">We are getting married!</h2>
             <p class="subtitle">💍💐 Join us as we embark on this beautiful journey of love, laughter, and happily ever after. 💕</p>
-            <h3 class="date-label">Our Wedding</h3>
-            <h5 class="wedding-date">Sunday 02nd March, 2025</h5>
-            <h4 class="date-label">11:35 AM</h4>
+            <div class="date-time-container">
+                <div class="border-design top"></div>
+                <h3 class="date-label">Our Wedding</h3>
+                <div class="wedding-date">
+                    <div class="date-parts">
+                        <span>Sunday</span>
+                        <span>02nd</span>
+                        <span>March</span>
+                        <span>2025</span>
+                    </div>
+                </div>
+                <h6 class="date-label">11:35 AM</h6>
+                <div class="border-design bottom"></div>
+            </div>
         </header>
 
         <section class="save-the-date-section" id="save-the-date">
@@ -1145,8 +1284,8 @@
                     <iframe 
                         id="saveTheDateVideo"
                         src="about:blank"
-                        data-src="https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/preview"
-                        allow="autoplay"
+                        data-src="https://drive.google.com/file/d/17qHPrreuGhGKat-dwu7phwI30TJ7CW0O/preview?autoplay=1&mute=0"
+                        allow="autoplay; fullscreen"
                         allowfullscreen
                         style="border: none; width: 100%; height: 100%;">
                     </iframe>
@@ -1334,21 +1473,18 @@
             const container = wrapper.closest('.video-container');
             const iframe = container.querySelector('iframe');
             
-            // Set the video source
-            iframe.src = iframe.getAttribute('data-src');
-            
-            // Hide the thumbnail wrapper
+            // Hide thumbnail immediately
             wrapper.style.display = 'none';
-            wrapper.style.opacity = '0';
             
-            // Focus on iframe for better keyboard accessibility
-            iframe.focus();
+            // Set the video source and force load
+            setTimeout(() => {
+                iframe.src = iframe.getAttribute('data-src');
+            }, 100);
             
-            // Add error handling
+            // Error handling
             iframe.onerror = function() {
                 console.error('Error loading video');
                 wrapper.style.display = 'block';
-                wrapper.style.opacity = '1';
             };
         }
     </script>
